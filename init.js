@@ -20,6 +20,13 @@ const Player = (function () {
   };
 })();
 
+function drowStone(context, xStone, yStone) {
+  context.strokeStyle = '#4a6084';
+  context.beginPath();
+  context.rect(xStone, yStone, 10, 10);
+  context.stroke();
+}
+
 function drowBaseGrid(context) {
   for(let i = 30; i < 600; i+=30) {
     context.strokeStyle = '#000000';
@@ -44,8 +51,12 @@ function drowPlayer(context, xPlayer, yPlayer) {
 
 (function() {
   let inter = null;
-  let xPlayer = 3;
-  let yPlayer = 3;
+  let xPlayer = 303;
+  let yPlayer = 303;
+  let xStone1 = 430;
+  let yStone1 = 130;
+  let xStone2 = 640;
+  let yStone2 = 220;
   const gameArea = document.getElementById('game-area');
   gameArea.width = 600;
   gameArea.height = 600;
@@ -53,23 +64,31 @@ function drowPlayer(context, xPlayer, yPlayer) {
   
   drowBaseGrid(context);
   drowPlayer(context, xPlayer, yPlayer);
+  drowStone(context, xStone1, yStone1);
+  drowStone(context, xStone2, yStone2);
 
   document.addEventListener('keyup', (event) => {
     if(inter) return;
     if(event.keyCode === 39) {
-      if(xPlayer >= 580) return;
       const x = xPlayer;
       const y = yPlayer;
+      const xs1 = xStone1;
+      const ys1 = yStone1;
+      const xs2 = xStone2;
+      const ys2 = yStone2;
       inter = setInterval(() => {
-	if(xPlayer === x + 29) {
+	if(xStone1 === xs1 - 29) {
 	  clearInterval(inter);
 	  inter = null;
 	}
 	context.clearRect(0, 0, 600, 600);
-	xPlayer += 1;
-	
+	xStone1 -= 1;
+	xStone2 -= 1;
+
 	drowBaseGrid(context);
 	drowPlayer(context, xPlayer, yPlayer);
+	drowStone(context, xStone1, yStone1);
+	drowStone(context, xStone2, yStone2);
       }, 30);
     } else if(event.keyCode === 40) {
       if(yPlayer >= 580) return;
@@ -87,24 +106,32 @@ function drowPlayer(context, xPlayer, yPlayer) {
 	drowPlayer(context, xPlayer, yPlayer);
       }, 30);
     } else if(event.keyCode === 37) {
-      if(xPlayer <= 10) return;
       const x = xPlayer;
       const y = yPlayer;
+      const xs1 = xStone1;
+      const ys1 = yStone1;
+      const xs2 = xStone2;
+      const ys2 = yStone2;
       inter = setInterval(() => {
-	if(xPlayer === x - 29) {
+	if(xStone2 === xs2 + 29) {
 	  clearInterval(inter);
 	  inter = null;
 	}
 	context.clearRect(0, 0, 600, 600);
-	xPlayer -= 1;
+	xStone2 += 1;
+	xStone1 += 1;
 	
 	drowBaseGrid(context);
 	drowPlayer(context, xPlayer, yPlayer);
+	drowStone(context, xStone1, yStone1);
+	drowStone(context, xStone2, yStone2);
       }, 30);
     } else if(event.keyCode === 38) {
       if(yPlayer <= 10) return;
-      const x = xPlayer;
-      const y = yPlayer;
+      const xs1 = xStone1;
+      const ys1 = yStone1;
+      const xs2 = xStone2;
+      const ys2 = yStone2;
       inter = setInterval(() => {
 	if(yPlayer === y - 29) {
 	  clearInterval(inter);
